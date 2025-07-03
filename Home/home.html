@@ -6,6 +6,80 @@
   <title>Estetique - Início</title>
   <link rel="stylesheet" href="home.css">
   <script src="home.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h2.text-center {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .col-md-3 {
+      flex: 0 0 23%;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 15px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+    }
+
+    .card-text {
+      font-size: 1em;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      padding: 10px;
+      background-color: #67086F;
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #4a044e;
+    }
+
+    .agendamento-select {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header class="top-bar">
@@ -17,35 +91,109 @@
   </header>
 
   <section class="categorias">
-    <button>Depilação</button>
-    <button>Unhas</button>
-    <button>Cabelo</button>
-    <button>Sobrancelha</button>
-    <button>Maquiagem</button>
+    <button onclick="filtrarCategoria('Depilação')">Depilação</button>
+    <button onclick="filtrarCategoria('Unhas')">Unhas</button>
+    <button onclick="filtrarCategoria('Cabelo')">Cabelo</button>
+    <button onclick="filtrarCategoria('Sobrancelha')">Sobrancelha</button>
+    <button onclick="filtrarCategoria('Maquiagem')">Maquiagem</button>
   </section>
 
   <section class="carrossel">
     <div class="slide ativo">💆‍♀️ Promoção: massagem 20% OFF</div>
     <div class="slide">💅 Agende sua unha hoje!</div>
-    <div class="slide">✂️ Corte feminino por R$29,90</div>
+    <div class="slide">✂️ Corte feminino por R$59,90</div>
   </section>
 
-  <section class="resultados">
-    <h2>Profissionais em destaque</h2>
-    <div class="cards">
-      <div class="card">
-        <h3>Maria Lima</h3>
-        <p>Depilação em domicílio</p>
-      </div>
-      <div class="card">
-        <h3>João Souza</h3>
-        <p>Barbearia clássica</p>
-      </div>
-      <div class="card">
-        <h3>Ana Paula</h3>
-        <p>Design de sobrancelha</p>
-      </div>
-    </div>
+  <!-- Seção de Serviços em Destaque -->
+  <section>
+    <h2 class="text-center mb-4">Serviços em Destaque</h2>
+    <div class="row" id="produtos-container"></div>
   </section>
+
+  <script>
+    const produtos = [
+      {
+        id: 1,
+        nome_produto: "Corte de cabelo Masculino",
+        preco: 29.90,
+        imagem: "https://tse3.mm.bing.net/th/id/OIP.DnGeRjaJ-09gJwdZQuadOQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      {
+        id: 2,
+        nome_produto: "Maquiagem Profissional",
+        preco: 120.00,
+        imagem: "https://tse3.mm.bing.net/th/id/OIP.ylUT4FLH4aNa3DmlyHu4ewHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      {
+        id: 3,
+        nome_produto: "Manicure e Pedicure",
+        preco: 49.90,
+        imagem: "https://tse1.explicit.bing.net/th/id/OIP.iFiLKrmvn6jPK6_pmiCicQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3"
+      },
+      {
+        id: 4,
+        nome_produto: "Massagem Relaxante",
+        preco: 79.90,
+        imagem: "https://i.pinimg.com/originals/a3/27/bc/a327bc221fd44697e540bd3509de239f.jpg"
+      }
+    ];
+
+    const container = document.getElementById("produtos-container");
+
+    function renderizarProdutos(lista) {
+      container.innerHTML = '';
+      lista.forEach(produto => {
+        const card = document.createElement("div");
+        card.className = "col-md-3";
+        card.innerHTML = `
+          <div class="card h-100">
+            <img src="${produto.imagem}" alt="${produto.nome_produto}" class="card-img-top">
+            <div class="card-body">
+              <h5 class="card-title">${produto.nome_produto}</h5>
+              <p class="card-text">R$ ${produto.preco.toFixed(2).replace(".", ",")}</p>
+              <a href="#" class="btn w-100" onclick="mostrarAgendamento(this)">Agendar Horário</a>
+              <div class="agendamento-select" style="display:none;">
+                <select class="btn w-100" style="margin-top:10px;" onchange="mostrarPagamento(this)">
+                  <option value="">Selecione um horário</option>
+                  <option>04/07 às 10:00</option>
+                  <option>05/07 às 14:30</option>
+                  <option>06/07 às 16:00</option>
+                </select>
+                <div class="mensagem-pagamento" style="display:none; margin-top:10px;">
+                  <a href="pagamento.html" class="btn w-100">💳 Efetuar Pagamento</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function mostrarAgendamento(botao) {
+      const selectBox = botao.nextElementSibling;
+      selectBox.style.display = selectBox.style.display === "none" ? "block" : "none";
+    }
+
+    function mostrarPagamento(selectElement) {
+      const pagamentoBox = selectElement.nextElementSibling;
+      if (selectElement.value !== "") {
+        pagamentoBox.style.display = "block";
+      } else {
+        pagamentoBox.style.display = "none";
+      }
+    }
+
+    function filtrarCategoria(categoria) {
+      const filtrados = produtos.filter(produto =>
+        produto.nome_produto.toLowerCase().includes(categoria.toLowerCase())
+      );
+      renderizarProdutos(filtrados.length ? filtrados : produtos);
+    }
+
+    // Inicializa a página com todos os produtos
+    renderizarProdutos(produtos);
+  </script>
 </body>
 </html>
+

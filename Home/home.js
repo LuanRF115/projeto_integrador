@@ -24,3 +24,4 @@ document.getElementById("busca").addEventListener("input", function () {
 document.getElementById("btn-config").addEventListener("click", function () {
   window.location.href = encodeURI("configuracao/configuracao.html");
 });
+
